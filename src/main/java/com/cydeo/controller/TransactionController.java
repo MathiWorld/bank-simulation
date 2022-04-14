@@ -6,11 +6,13 @@ import com.cydeo.service.AccountService;
 import com.cydeo.service.TransactionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.UUID;
 
@@ -29,7 +31,7 @@ public class TransactionController {
     @GetMapping("/make-transfer")
     public String retrieveTransactionForm(Model model){
         model.addAttribute("accounts", accountService.listAllAccount());
-        model.addAttribute("transaction", Transaction.builder().build());//one empy object tp fill
+        model.addAttribute("transaction", Transaction.builder().build());
         model.addAttribute("lastTransactionList", transactionService.retrieveLastTransaction());
 
         return "transaction/make-transfer";
@@ -38,7 +40,12 @@ public class TransactionController {
 
 
     @PostMapping("/transfer")
-    public String makeTransfer(@ModelAttribute("transaction")Transaction transaction){
+    public String makeTransfer(@Valid @ModelAttribute("transaction")Transaction transaction, BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            model.addAttribute("accounts", accountService.listAllAccount());
+            return "transaction/make-transfer";
+        }
 
         Account reciever = accountService.retriveById(transaction.getReceiver());
         Account sender = accountService.retriveById(transaction.getSender());

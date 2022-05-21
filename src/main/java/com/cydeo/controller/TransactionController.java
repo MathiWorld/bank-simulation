@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.UUID;
+
 
 @Controller
 public class TransactionController {
@@ -27,9 +27,9 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-
     @GetMapping("/make-transfer")
-    public String retrieveTransactionForm(Model model){
+    public String retrieveTransactionForm(Model model) {
+
         model.addAttribute("accounts", accountService.listAllActiveAccount());
         model.addAttribute("transactionDTO", new TransactionDTO());
         model.addAttribute("lastTransactionList", transactionService.retrieveLastTransactions());
@@ -38,27 +38,25 @@ public class TransactionController {
 
     }
 
-
     @PostMapping("/transfer")
-    public String makeTransfer(@Valid @ModelAttribute("transactionDTO") TransactionDTO transactionDTO, BindingResult bindingResult, Model model){
+    public String makeTransfer(@Valid @ModelAttribute("transactionDTO") TransactionDTO transactionDTO, BindingResult bindingResult, Model model) {
 
-        if(bindingResult.hasErrors()){
+        if (bindingResult.hasErrors()) {
             model.addAttribute("accounts", accountService.listAllAccount());
             return "transaction/make-transfer";
         }
 
         AccountDTO reciever = transactionDTO.getReceiver();
         AccountDTO sender = transactionDTO.getSender();
-        transactionService.makeTransfer(transactionDTO.getAmount(),new Date(),sender,reciever, transactionDTO.getMessage());
+        transactionService.makeTransfer(transactionDTO.getAmount(), new Date(), sender, reciever, transactionDTO.getMessage());
         return "redirect:/make-transfer";
 
     }
 
     @GetMapping("/transaction/{id}")
-    public String transactionDetailById(@PathVariable("id")Long id, Model model) {
-
+    public String transactionDetailById(@PathVariable("id") Long id, Model model) {
         model.addAttribute("transactionList", transactionService.findTransactionListByAccountId(id));
-
         return "transaction/transactions";
     }
+
 }

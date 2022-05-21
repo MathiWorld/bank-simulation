@@ -19,9 +19,13 @@ public class AccountConverter implements Converter<String, AccountDTO> {
 
     @Override
     public AccountDTO convert(String source) {
-        if(source == null || source.equals("")) {
+
+        if (source == null || source.equals("")) {
             return null;
         }
+
         return accountService.retrieveById(Long.parseLong(source));
+
     }
+
 }

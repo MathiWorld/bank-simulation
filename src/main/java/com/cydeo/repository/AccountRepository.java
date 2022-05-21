@@ -1,9 +1,11 @@
 package com.cydeo.repository;
 
+import com.cydeo.entity.Account;
 import com.cydeo.enums.AccountStatus;
-import com.cydeo.model.Account;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 

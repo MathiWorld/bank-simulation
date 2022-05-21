@@ -1,25 +1,26 @@
 package com.cydeo.service.impl;
 
+import com.cydeo.dto.AccountDTO;
+import com.cydeo.entity.Account;
 import com.cydeo.enums.AccountStatus;
-import com.cydeo.enums.AccountType;
-import com.cydeo.model.Account;
+import com.cydeo.mapper.AccountMapper;
+
 import com.cydeo.repository.AccountRepository;
 import com.cydeo.service.AccountService;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
-    AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
 
-    AccountMapper accountMapper;
+    private  final AccountMapper accountMapper;
 
     public AccountServiceImpl(AccountRepository accountRepository, AccountMapper accountMapper) {
         this.accountRepository = accountRepository;
@@ -41,7 +42,6 @@ public class AccountServiceImpl implements AccountService {
         accountDTO.setAccountStatus(AccountStatus.ACTIVE);
         accountRepository.save(accountMapper.convertToEntity(accountDTO));
     }
-
 
     @Override
     public void deleteAccount(Long accountId) {

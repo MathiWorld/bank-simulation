@@ -1,7 +1,10 @@
 package com.cydeo.repository;
 
 import com.cydeo.model.Transaction;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,28 +12,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@Component
-public class TransactionRepository {
+@Repository
+public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    public List<Transaction> transactionList = new ArrayList<>();
 
-    public Transaction save(Transaction transaction){
-        transactionList.add(transaction);
-        return transaction;
-    }
+    @Query(value = "SELECT * FROM transactions ORDER BY creation_date ASC LIMIT 10", nativeQuery = true)
+    List<Transaction> findLastTenTransactions();
 
-    public List<Transaction> findAll() {
-        return  transactionList;
-    }
+    @Query("SELECT t FROM Transaction t WHERE t.sender.id = ?1 OR t.receiver.id = ?1")
+    List<Transaction> findTransactionListById(Long id);
 
-    public List<Transaction> retrieveLastTransactions() {
-        return transactionList.stream().
-                sorted(Comparator.comparing(Transaction::getCreationDate)).limit(10).collect(Collectors.toList());
-    }
-
-    public List<Transaction> findTransactionListById(UUID id) {
-        return transactionList.stream().filter(transaction -> transaction.getSender().equals(id) || transaction.getReceiver().equals(id))
-                .collect(Collectors.toList());
-    }
 }
-

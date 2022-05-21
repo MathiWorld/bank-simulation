@@ -1,5 +1,7 @@
 package com.cydeo.controller;
 
+import com.cydeo.dto.AccountDTO;
+import com.cydeo.dto.TransactionDTO;
 import com.cydeo.model.Account;
 import com.cydeo.model.Transaction;
 import com.cydeo.service.AccountService;
@@ -30,9 +32,9 @@ public class TransactionController {
 
     @GetMapping("/make-transfer")
     public String retrieveTransactionForm(Model model){
-        model.addAttribute("accounts", accountService.listAllAccount());
-        model.addAttribute("transaction", Transaction.builder().build());
-        model.addAttribute("lastTransactionList", transactionService.retrieveLastTransaction());
+        model.addAttribute("accounts", accountService.listAllActiveAccount());
+        model.addAttribute("transactionDTO", new TransactionDTO());
+        model.addAttribute("lastTransactionList", transactionService.retrieveLastTransactions());
 
         return "transaction/make-transfer";
 
@@ -40,24 +42,24 @@ public class TransactionController {
 
 
     @PostMapping("/transfer")
-    public String makeTransfer(@Valid @ModelAttribute("transaction")Transaction transaction, BindingResult bindingResult, Model model){
+    public String makeTransfer(@Valid @ModelAttribute("transactionDTO") TransactionDTO transactionDTO, BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
             model.addAttribute("accounts", accountService.listAllAccount());
             return "transaction/make-transfer";
         }
 
-        Account reciever = accountService.retriveById(transaction.getReceiver());
-        Account sender = accountService.retriveById(transaction.getSender());
-        transactionService.makeTransfer(transaction.getAmount(),new Date(),sender,reciever,transaction.getMessage());
+        AccountDTO reciever = transactionDTO.getReceiver();
+        AccountDTO sender = transactionDTO.getSender();
+        transactionService.makeTransfer(transactionDTO.getAmount(),new Date(),sender,reciever, transactionDTO.getMessage());
         return "redirect:/make-transfer";
 
     }
 
     @GetMapping("/transaction/{id}")
-    public String transactionDetailById(@PathVariable("id")UUID id, Model model) {
+    public String transactionDetailById(@PathVariable("id")Long id, Model model) {
 
-        model.addAttribute("transactionList", transactionService.findTransactionListById(id));
+        model.addAttribute("transactionList", transactionService.findTransactionListByAccountId(id));
 
         return "transaction/transactions";
     }

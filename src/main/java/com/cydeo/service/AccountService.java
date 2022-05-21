@@ -1,5 +1,6 @@
 package com.cydeo.service;
 
+import com.cydeo.dto.AccountDTO;
 import com.cydeo.enums.AccountType;
 import com.cydeo.model.Account;
 
@@ -9,12 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 public interface AccountService {
+    void createNewAccount(AccountDTO accountDTO);
 
-    Account createNewAccount(BigDecimal balance, Date creationDate, AccountType accountType, Long userId);
+    List<AccountDTO> listAllAccount();
 
-    List<Account> listAllAccount();
+    List<AccountDTO> listAllActiveAccount();
+    void deleteAccount(Long account);
 
-    void deleteAccount(UUID account);
-
-    Account retriveById(UUID account);
+    AccountDTO retrieveById(Long account);
 }

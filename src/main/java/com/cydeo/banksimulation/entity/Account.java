@@ -2,31 +2,40 @@ package com.cydeo.banksimulation.entity;
 
 import com.cydeo.banksimulation.enums.AccountStatus;
 import com.cydeo.banksimulation.enums.AccountType;
-import lombok.Builder;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.UUID;
 
-@Data
-@Builder
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "accounts")
 public class Account {
 
-    private UUID id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
 
-    @NotNull
-    @Positive
-    private BigDecimal balance;
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
+    @Enumerated(EnumType.STRING)
     private AccountStatus accountStatus;
 
-    @NotNull
-    private AccountType accountType;
+    @Column(columnDefinition = "DATE")
     private Date creationDate;
 
-    @NotNull
     private Long userId;
+
+    private BigDecimal balance;
+    private String phoneNumber;
+    private Boolean otpVerified;
 
 }

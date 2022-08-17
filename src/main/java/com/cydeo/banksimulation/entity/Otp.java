@@ -1,37 +1,30 @@
 package com.cydeo.banksimulation.entity;
 
+import com.cydeo.banksimulation.enums.VerificationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "transactions")
-public class Transaction {
+@Table(name = "accounts")
+public class Otp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Account sender;
+    private Account account;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Account receiver;
+    private Integer otpCode;
 
-    private BigDecimal amount;
-
-    private String message;
-
-    @Column(columnDefinition = "DATE")
-    private Date creationDate;
-
+    @Enumerated(EnumType.STRING)
+    private VerificationStatus verificationStatus;
 }

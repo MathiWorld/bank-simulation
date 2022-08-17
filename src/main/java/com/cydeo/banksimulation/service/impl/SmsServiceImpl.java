@@ -10,7 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @Service
-@ConditionalOnProperty(value = "smsservice.enable", havingValue = "true", matchIfMissing = false)
+//@ConditionalOnProperty(value = "smsservice.enable", havingValue = "true", matchIfMissing = false)
 public class SmsServiceImpl implements SmsService{
     @Override
     public String sendSms(SmsRequestDTO smsRequestDTO) {

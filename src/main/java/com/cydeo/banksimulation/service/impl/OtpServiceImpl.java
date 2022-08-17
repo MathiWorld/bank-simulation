@@ -21,9 +21,7 @@ public class OtpServiceImpl implements OtpService {
     private final AccountRepository accountRepository;
     private final SmsService smsService;
 
-    public OtpServiceImpl(OtpRepository otpRepository,
-                          AccountRepository accountRepository,
-                          SmsService smsService) {
+    public OtpServiceImpl(OtpRepository otpRepository, AccountRepository accountRepository, SmsService smsService) {
         this.otpRepository = otpRepository;
         this.accountRepository = accountRepository;
         this.smsService = smsService;
